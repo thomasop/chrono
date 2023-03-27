@@ -11,15 +11,11 @@ import Combine
 struct ContentView: View {
     @State private var travail: Int = 0
     @State private var pause: Int = 0
+    @State private var startTime = Date()
     @State private var didTap:Bool = false
-    @State private var time:String = ""
-    
-    enum Flavor: String, CaseIterable, Identifiable {
-        case chocolate, vanilla, strawberry
-        var id: Self { self }
-    }
-    
-    @State private var selectedFlavor: Flavor = .chocolate
+    @State var isTimerRunning:Bool = false
+    @State private var time: Int = 0
+    @State private var timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
     
     private static let formatter: NumberFormatter = {
         let formatter = NumberFormatter()
@@ -46,12 +42,7 @@ struct ContentView: View {
                     }
                 }
                 Button("Ajouter ce temps") {
-                    if (String(travail).count == 1) {
-                        time = "0" + String(travail) + ":00"
-                    } else {
-                        time = String(travail) + ":00"
-                    }
-                    
+                    time = travail
                 }
                 
             }
@@ -62,12 +53,15 @@ struct ContentView: View {
             HStack {
                 VStack {
                     
-                    Text("\(time)")
+                    Text("\(time)").onReceive(timer) {
+                        _ in
+                        if self.isTimerRunning {
+                            time -= 1
+                        }
+                    }
                     Button(action: {
-                        if(self.didTap == false) {
-                            self.didTap = true
-                        } else {
-                            self.didTap = false
+                        if(time > 0) {
+                            isTimerRunning = true
                         }
                     }) {
                         Text("Start")
@@ -78,9 +72,6 @@ struct ContentView: View {
             
         }
         .padding()
-    }
-    func test() {
-        
     }
 }
 
