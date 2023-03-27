@@ -59,14 +59,23 @@ struct ContentView: View {
                             time -= 1
                         }
                     }
-                    Button(action: {
-                        if(time > 0) {
-                            isTimerRunning = true
+                    HStack {
+                        Button(action: {
+                            if(time > 0) {
+                                isTimerRunning = true
+                            }
+                        }) {
+                            Text("Start")
+                        }.padding(10)
+                            .background(didTap ? Color.blue : Color.yellow)
+                        if(isTimerRunning) {
+                            Button(action: {
+                                    isTimerRunning = false
+                            }) {
+                                Text("Stop")
+                            }.padding(10).background(Color.red)
                         }
-                    }) {
-                        Text("Start")
-                    }.padding(10)
-                        .background(didTap ? Color.blue : Color.yellow)
+                    }
                 }
             }
             
