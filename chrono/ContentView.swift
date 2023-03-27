@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-import Combine
+import UserNotifications
 
 struct ContentView: View {
     @State private var travail: Int = 0
@@ -60,9 +60,11 @@ struct ContentView: View {
                             if (time == 0 && status == false) {
                                 time = pause
                                 status = true
+                                sendNotification(title: "Pause", message: "Le travail est fini maintenant tu peux prendre une petite pause")
                             } else if (time == 0 && status == true) {
                                 time = travail
                                 status = false
+                                sendNotification(title: "Travail", message: "La pause est fini maintenant il faut travailler")
                             }
                             time -= 1
                         }
@@ -78,7 +80,7 @@ struct ContentView: View {
                             .background(didTap ? Color.blue : Color.yellow)
                         if(isTimerRunning) {
                             Button(action: {
-                                    isTimerRunning = false
+                                isTimerRunning = false
                             }) {
                                 Text("Stop")
                             }.padding(10).background(Color.red)
@@ -89,6 +91,22 @@ struct ContentView: View {
             
         }
         .padding()
+    }
+    
+    func sendNotification(title: String, message: String) {
+        let notificationContent = UNMutableNotificationContent()
+        notificationContent.title = title
+        notificationContent.subtitle = message
+        notificationContent.sound = .default
+        notificationContent.badge = 1
+        
+        let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 0.01, repeats: false)
+        // you could also use...
+        // UNCalendarNotificationTrigger(dateMatching: .init(year: 2022, month: 12, day: 10, hour: 0, minute: 0), repeats: true)
+        
+        let req = UNNotificationRequest(identifier: UUID().uuidString, content: notificationContent, trigger: trigger)
+        
+        UNUserNotificationCenter.current().add(req)
     }
 }
 
