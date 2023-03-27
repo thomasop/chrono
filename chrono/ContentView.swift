@@ -14,6 +14,7 @@ struct ContentView: View {
     @State private var startTime = Date()
     @State private var didTap:Bool = false
     @State var isTimerRunning:Bool = false
+    @State var status:Bool = false
     @State private var time: Int = 0
     @State private var timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
     
@@ -56,6 +57,13 @@ struct ContentView: View {
                     Text("\(time)").onReceive(timer) {
                         _ in
                         if self.isTimerRunning {
+                            if (time == 0 && status == false) {
+                                time = pause
+                                status = true
+                            } else if (time == 0 && status == true) {
+                                time = travail
+                                status = false
+                            }
                             time -= 1
                         }
                     }
