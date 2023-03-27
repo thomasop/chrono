@@ -12,6 +12,14 @@ struct ContentView: View {
     @State private var travail: Int = 0
     @State private var pause: Int = 0
     @State private var didTap:Bool = false
+    @State private var time:String = ""
+    
+    enum Flavor: String, CaseIterable, Identifiable {
+        case chocolate, vanilla, strawberry
+        var id: Self { self }
+    }
+    
+    @State private var selectedFlavor: Flavor = .chocolate
     
     private static let formatter: NumberFormatter = {
         let formatter = NumberFormatter()
@@ -24,24 +32,37 @@ struct ContentView: View {
             Text("Pomodoro timer").font(.title)
                 .padding(.top, 40)
             Text("Choissisez votre timer de travail et de pause").padding(10)
-            HStack {
-                VStack {
-                    Text("Travail")
+            Form {
+                HStack {
                     TextField("Travail", value: $travail, formatter: NumberFormatter())
+                    Stepper(value: $travail, in: 0...60) {
+                        EmptyView()
+                    }
                 }
-                VStack {
-                    Text("Pause")
-                    TextField("Pause", value: $pause, formatter: NumberFormatter())
+                HStack {
+                    TextField("pause", value: $pause, formatter: NumberFormatter())
+                    Stepper(value: $pause, in: 0...60) {
+                        EmptyView()
+                    }
+                }
+                Button("Ajouter ce temps") {
+                    if (String(travail).count == 1) {
+                        time = "0" + String(travail) + ":00"
+                    } else {
+                        time = String(travail) + ":00"
+                    }
+                    
                 }
                 
             }
+            
             .padding(.horizontal, 80.0)
             .padding(.top, 50.0)
             .padding(.bottom, 40.0)
             HStack {
                 VStack {
                     
-                    Text("00:00:00")
+                    Text("\(time)")
                     Button(action: {
                         if(self.didTap == false) {
                             self.didTap = true
@@ -54,12 +75,12 @@ struct ContentView: View {
                         .background(didTap ? Color.blue : Color.yellow)
                 }
             }
-            HStack {
-            }
-            .padding(.bottom, 80.0)
             
         }
         .padding()
+    }
+    func test() {
+        
     }
 }
 
