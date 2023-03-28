@@ -17,7 +17,7 @@ struct ContentView: View {
     @State var isTimerRunning:Bool = false
     @State var status:Bool = false
     @State private var time: String = ""
-    @State private var timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
+    @State private var timer = Timer.publish(every: 60, on: .main, in: .common).autoconnect()
     
     private static let formatter: NumberFormatter = {
         let formatter = NumberFormatter()
