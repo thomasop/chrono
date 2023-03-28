@@ -16,7 +16,7 @@ struct ContentView: View {
     @State var isTimerRunning:Bool = false
     @State var status:Bool = false
     @State private var time: String = ""
-    @State private var timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
+    @State private var timer = Timer.publish(every: 60, on: .main, in: .common).autoconnect()
     
     private static let formatter: NumberFormatter = {
         let formatter = NumberFormatter()
@@ -49,7 +49,6 @@ struct ContentView: View {
                         }
                     }
                 }
-                
             }
             .padding(.horizontal, 80.0)
             .padding(.top, 50.0)
@@ -87,6 +86,8 @@ struct ContentView: View {
                             }) {
                                 Text("Stop")
                             }.padding(10).background(Color.red)
+                        }
+                        if (time != "") {
                             Button(action: {
                                 isTimerRunning = false
                                 time = ""
@@ -100,7 +101,6 @@ struct ContentView: View {
                     .padding(.bottom, 30)
                 }
             }
-            
         }
         .padding()
     }
